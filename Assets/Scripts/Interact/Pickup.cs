@@ -1,23 +1,12 @@
 using UnityEngine;
 
-public class Pickup : MonoBehaviour, IInteractable
+public class Pickup : InteractBase
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     public int itemID;
 
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void Interact(GameObject interactor)
+    public override void Interact(GameObject interactor)
     {
         var player = interactor.GetComponent<PlayerController>();
         if (player == null) return;

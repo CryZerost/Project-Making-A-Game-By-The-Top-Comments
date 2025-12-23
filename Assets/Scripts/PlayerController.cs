@@ -22,15 +22,19 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private IInteractable _currentInteractable;
     [SerializeField] private GameObject _interactTextObj;
     private TMP_Text _interactText;
+    
 
     [Header("Shooter")]
-    [SerializeField] private Transform _bulletSpawnPoint;
+    [SerializeField] private GameObject _vfxShootPrefab;
+
     [SerializeField] private GameObject _bulletPrefab;
     [SerializeField] private float _bulletSpeed = 10f;
 
     [Header("Item")]
+    [SerializeField] private Transform _itemSpawnPoint;
     [SerializeField] private int _playerItemID;
     public bool hasItem = false;
+    [SerializeField] private GameObject _currentItem;
     [SerializeField] private GameObject[] dropItemPrefabs;
     [SerializeField] private GameObject[] handItemObjects;
 
@@ -77,7 +81,7 @@ public class PlayerController : MonoBehaviour
             {
                _currentInteractable = interactObj;
                 _interactTextObj.SetActive(true);
-                _interactText.text = $"[E] Pickup";
+                _interactText.text = $"{interactObj.InteractText}";
 
             }
             else
@@ -124,26 +128,30 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void _SpawnBullet()
-    {
-        var bullet = Instantiate(_bulletPrefab, _bulletSpawnPoint.position, _bulletSpawnPoint.rotation);
-        bullet.GetComponent<Rigidbody>().linearVelocity = _cameraTransform.forward * _bulletSpeed;
-    }
+    //private void _SpawnBullet()
+    //{
+    //    var bullet = Instantiate(_bulletPrefab, _bulletSpawnPoint.position, _bulletSpawnPoint.rotation);
+    //    var trailVFX = Instantiate(_vfxShootPrefab, _bulletSpawnPoint.position, _bulletSpawnPoint.rotation, _bulletSpawnPoint);
+    //    bullet.GetComponent<Rigidbody>().linearVelocity = _cameraTransform.forward * _bulletSpeed;
+    //}
 
     public void AddItem(int itemID)
     {
         hasItem = true;
         _playerItemID = itemID;
         handItemObjects[itemID].SetActive(true);
+        _currentItem = handItemObjects[itemID];
+
     }
 
     public void RemoveItem(int itemID)
     {
         if (!hasItem) return;
+        _currentItem = null;    
         _currentInteractable = null;
         hasItem = false;
         handItemObjects[itemID].SetActive(false);
-        var dropItem = Instantiate(dropItemPrefabs[itemID], _bulletSpawnPoint.position, _bulletSpawnPoint.rotation);
+        var dropItem = Instantiate(dropItemPrefabs[itemID], _itemSpawnPoint.position, _itemSpawnPoint.rotation);
     }
 
     private bool _IsRaycast()
@@ -155,7 +163,6 @@ public class PlayerController : MonoBehaviour
     public void OnDrop(InputAction.CallbackContext context)
     {
         if (!context.started) return;
-
         RemoveItem(_playerItemID);
     }
 
@@ -164,17 +171,13 @@ public class PlayerController : MonoBehaviour
         if (!context.started) return;
 
         if (!hasItem) return;
-        switch (_playerItemID) 
+        
+        if (_currentItem != null)
         {
-            case 0:
-                _SpawnBullet();
-                break;
-            case 1:
-
-                break;
-            default: 
-                
-                break;
+            if (_currentItem.gameObject.TryGetComponent(out WeaponBase weaponBase))
+            {
+                weaponBase.Shoot();
+            }
         }
 
 
