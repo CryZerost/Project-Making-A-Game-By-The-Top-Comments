@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject _vfxShootPrefab;
 
     [SerializeField] private GameObject _bulletPrefab;
-    [SerializeField] private float _bulletSpeed = 10f;
+    //[SerializeField] private float _bulletSpeed = 10f;
 
     [Header("Item")]
     [SerializeField] private Transform _itemSpawnPoint;
@@ -122,6 +122,8 @@ public class PlayerController : MonoBehaviour
 
             }
 
+            _currentInteractable = null;
+
             _interactTextObj.SetActive(false);
 
             Debug.DrawRay(_cameraTransform.position, _cameraTransform.forward * _raycastDistance, Color.green);
@@ -151,7 +153,8 @@ public class PlayerController : MonoBehaviour
         _currentInteractable = null;
         hasItem = false;
         handItemObjects[itemID].SetActive(false);
-        var dropItem = Instantiate(dropItemPrefabs[itemID], _itemSpawnPoint.position, _itemSpawnPoint.rotation);
+        Rigidbody rb = Instantiate(dropItemPrefabs[itemID], _itemSpawnPoint.position, _itemSpawnPoint.rotation).GetComponent<Rigidbody>();
+        rb.AddForce(_cameraTransform.forward * 5f, ForceMode.Impulse);
     }
 
     private bool _IsRaycast()

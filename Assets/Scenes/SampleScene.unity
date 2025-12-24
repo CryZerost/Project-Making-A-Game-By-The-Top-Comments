@@ -675,7 +675,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ee2b0df1c34c7d1499b9cd10e49a4e3c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.25
+      value: 0.52
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ee2b0df1c34c7d1499b9cd10e49a4e3c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -3365,6 +3365,9 @@ MonoBehaviour:
   _bulletSpawnPoint: {fileID: 238386839}
   _weaponDamage: 1.5
   _muzzleEffect: {fileID: 1785338239}
+  _hitEffect: {fileID: 3826101428460862031, guid: 1f952bbc98b27d440aa71caec268d66e, type: 3}
+  _canShoot: 0
+  _fireRate: 8.33
 --- !u!4 &285596800 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4121315046538258280, guid: 312a24f72d4a0f343a0a331cb3e3854f, type: 3}
@@ -4911,6 +4914,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Dummy
   health: 5
+  maxHealth: 5
+  smokeEffectPrefabs: {fileID: 4929709729796960493, guid: 5a8c0a1e6d4adcf4cbd7b75dea38c4bb, type: 3}
 --- !u!43 &431983733
 Mesh:
   m_ObjectHideFlags: 0
@@ -33387,11 +33392,10 @@ MonoBehaviour:
   _layerMask:
     serializedVersion: 2
     m_Bits: 8
-  _raycastDistance: 5
+  _raycastDistance: 2.5
   _interactTextObj: {fileID: 900586046}
   _vfxShootPrefab: {fileID: 972487439195556214, guid: 24f40cb07aba17e46a5776c43c3f68e5, type: 3}
   _bulletPrefab: {fileID: 8377424507231355618, guid: 738d29a21f31d9841a8bf64ef4175081, type: 3}
-  _bulletSpeed: 165
   _itemSpawnPoint: {fileID: 1581562995}
   _playerItemID: 0
   hasItem: 0
