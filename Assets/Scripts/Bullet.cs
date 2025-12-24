@@ -15,12 +15,11 @@ public class Bullet : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision collision)
-    {
-        ContactPoint contactPoint = collision.contacts[0];
-
+    {      
         if (collision.gameObject.TryGetComponent(out IDamage damage))
         {
-            damage.TakeDamage(_bulletDamage);
+            if (collision.gameObject.CompareTag("Player"))
+                damage.TakeDamage(_bulletDamage);
         }
 
         //if (vfxHitPrefab != null)
@@ -28,6 +27,7 @@ public class Bullet : MonoBehaviour
         //    Instantiate(vfxHitPrefab, contactPoint.point, Quaternion.LookRotation(contactPoint.normal));
         //}
 
-        Destroy(gameObject);
+        if (!collision.gameObject.CompareTag("Enemy"))
+            Destroy(gameObject);
     }
 }

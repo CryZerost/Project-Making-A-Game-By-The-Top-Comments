@@ -4,11 +4,12 @@ using UnityEngine;
 public abstract class WeaponBase : MonoBehaviour
 {
     [SerializeField] private Transform _playerCamera;
-    [SerializeField] private float _rangeDistance = 20f;
+    [SerializeField] private float _rangeDistance = 75f;
     [SerializeField] private Transform _bulletSpawnPoint;
     [SerializeField] private float _weaponDamage;
     [SerializeField] private ParticleSystem _muzzleEffect;
     [SerializeField] private GameObject _hitEffect;
+    [SerializeField] private LayerMask _whatIsPlayer;
 
     // Cooldown
     [SerializeField] private bool _canShoot = true;
@@ -43,7 +44,7 @@ public abstract class WeaponBase : MonoBehaviour
 
         RaycastHit hit;
         Ray ray = new Ray(_playerCamera.position, _playerCamera.forward);
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        if (Physics.Raycast(ray, out hit, _rangeDistance))
         {
             Debug.Log(hit.transform.name);
 

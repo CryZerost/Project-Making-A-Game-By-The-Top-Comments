@@ -30,10 +30,14 @@ public class Dummy : MonoBehaviour, IDamage
 
         if (health <= 0)
         {
-            Instantiate(smokeEffectPrefabs, transform.position, transform.rotation);
-           this.gameObject.SetActive(false);
-            Debug.Log($"-{damage}");
+            Invoke(nameof(DestroyDummy), 0.5f);
         }
 
+    }
+
+    public void DestroyDummy()
+    {
+        Instantiate(smokeEffectPrefabs, transform.position, transform.rotation);
+        Destroy(gameObject);
     }
 }

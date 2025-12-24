@@ -273,5 +273,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c3df5bdb095418459f66aa716a4e9bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bullet
-  vfxHitPrefab: {fileID: 4929709729796960493, guid: 5a8c0a1e6d4adcf4cbd7b75dea38c4bb, type: 3}
   _bulletLifetime: 3
+  _bulletDamage: 1
