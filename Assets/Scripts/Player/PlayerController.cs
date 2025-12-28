@@ -30,7 +30,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject _currentItem;
     [SerializeField] private GameObject[] dropItemPrefabs;
     [SerializeField] private GameObject[] handItemObjects;
-    [SerializeField] private GameObject enemyBahlil;
 
     
     
@@ -185,6 +184,19 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    public void OnReload(InputAction.CallbackContext context)
+    {
+        if (!context.started) return;
+
+        if (_currentItem != null)
+        {
+            if (_currentItem.gameObject.TryGetComponent(out WeaponBase weaponBase))
+            {
+                weaponBase.ReloadAmmo();
+            }
+        }
+    }
+    
     public void OnMove(InputAction.CallbackContext context)
     {
         _moveInput = context.ReadValue<Vector2>();

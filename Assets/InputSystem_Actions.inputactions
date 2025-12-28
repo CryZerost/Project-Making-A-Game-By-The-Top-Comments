@@ -97,7 +97,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Dialogue",
+                    "name": "Reload",
                     "type": "Button",
                     "id": "99540d32-f646-403d-ac5a-1a11495ba6d4",
                     "expectedControlType": "",
@@ -484,11 +484,11 @@
                 {
                     "name": "",
                     "id": "f9034677-18e7-429e-8b44-6ec7bcd72656",
-                    "path": "<Keyboard>/tab",
+                    "path": "<Keyboard>/r",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Dialogue",
+                    "action": "Reload",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

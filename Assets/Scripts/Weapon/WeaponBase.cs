@@ -15,17 +15,28 @@ public abstract class WeaponBase : MonoBehaviour
     // Cooldown
     [SerializeField] private bool _canShoot = true;
     [SerializeField] private float _fireRate;
+    private int ammo = 10;
+    [SerializeField] private int maxAmmo = 10;
+    [SerializeField] private bool _isReloading = false;
 
     private void OnEnable()
     {
         _muzzleEffect.Stop();
         _canShoot = true;
+        InitializeAmmo();   
+    }
+
+    private void InitializeAmmo()
+    {
+        ammo = maxAmmo;
+        PlayerUI.instance.UpdateAmmoUI(ammo, maxAmmo);
     }
 
     public void Shoot()
     {
-        if (!_canShoot) return;
-        StartCoroutine(ShootCooldown());
+        if (!_canShoot || _isReloading) return;
+        if (ammo <= 0 && !_isReloading) StartCoroutine(Reloading());
+        else StartCoroutine(ShootCooldown());
     }
 
     IEnumerator ShootCooldown()
@@ -39,9 +50,33 @@ public abstract class WeaponBase : MonoBehaviour
         _canShoot = true;
     }
 
+    public void ReloadAmmo()
+    {
+        if (_isReloading) return;
+        StartCoroutine(Reloading());
+    }
+
+    IEnumerator Reloading()
+    {
+        _isReloading = true;
+
+        PlayerUI.instance.UpdateReloadUI("Is Reloading");
+
+        yield return new WaitForSeconds(2f);
+
+        ammo = maxAmmo;
+        PlayerUI.instance.UpdateAmmoUI(ammo, maxAmmo);
+
+        _isReloading = false;
+    }
+
     public void ShootProjectile()
     {
         _muzzleEffect.Play();
+        
+        // Ammo
+        ammo--;
+        PlayerUI.instance.UpdateAmmoUI(ammo, maxAmmo);
 
         RaycastHit hit;
         Ray ray = new Ray(_playerCamera.position, _playerCamera.forward);

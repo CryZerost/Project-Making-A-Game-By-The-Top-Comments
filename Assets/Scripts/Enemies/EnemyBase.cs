@@ -31,6 +31,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamage
     protected float health = 5f;
     [SerializeField] protected float maxHealth = 5f;
     [SerializeField] protected float enemyDamage = 1f;
+    [SerializeField] protected EnemyLocalUI enemyLocalUI;
 
 
     private void OnEnable()
@@ -114,6 +115,9 @@ public abstract class EnemyBase : MonoBehaviour, IDamage
     public void TakeDamage(float damage)
     {
         health -= damage;
+
+        enemyLocalUI.UpdateHealthUI(health, maxHealth);
+
 
         if (health <= 0) StartCoroutine(DestroyEnemy());
     }

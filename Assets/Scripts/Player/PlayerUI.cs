@@ -9,6 +9,11 @@ public class PlayerUI : MonoBehaviour
     [Header("Health UI")]
     public Slider playerHealthSlider;
     public TMP_Text playerHealthText;
+
+    [Header("Ammo UI")]
+    public Slider ammoSlider;
+    public TMP_Text ammoText;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     private void Awake()
@@ -21,8 +26,25 @@ public class PlayerUI : MonoBehaviour
 
     public void UpdateHealthUI(float health, float maxHealth)
     {
-        playerHealthText.text = $"Health: {health}/{maxHealth}";
         playerHealthSlider.maxValue = maxHealth;
         playerHealthSlider.value = Mathf.Clamp(health,0, maxHealth);
+        playerHealthText.text = $"Health: {health}/{maxHealth}";
+    }
+
+    
+
+    public void UpdateAmmoUI(float ammo, float maxAmmo)
+    {
+        ammoSlider.gameObject.SetActive(true);
+        ammoSlider.maxValue = maxAmmo;
+        ammoSlider.value = Mathf.Clamp(ammo, 0, maxAmmo);
+        ammoText.text = $"Ammo: {ammo}/{maxAmmo}";
+
+    }
+
+    public  void UpdateReloadUI(string text)
+    {
+        ammoSlider.gameObject.SetActive(true);
+        ammoText.text = $"{text}";
     }
 }
