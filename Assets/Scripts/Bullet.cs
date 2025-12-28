@@ -16,7 +16,7 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {      
-        if (collision.gameObject.TryGetComponent(out IDamage damage))
+        if (collision.gameObject.TryGetComponent(out PlayerStats damage))
         {
             if (collision.gameObject.CompareTag("Player"))
                 damage.TakeDamage(_bulletDamage);
@@ -29,5 +29,10 @@ public class Bullet : MonoBehaviour
 
         if (!collision.gameObject.CompareTag("Enemy"))
             Destroy(gameObject);
+    }
+
+    public void SetDamage(float damage)
+    {
+        _bulletDamage = damage;
     }
 }

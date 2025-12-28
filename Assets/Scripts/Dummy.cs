@@ -4,7 +4,7 @@ public class Dummy : MonoBehaviour, IDamage
 {
     [SerializeField] private float health;
     [SerializeField] private float maxHealth = 5f;
-    [SerializeField] private GameObject smokeEffectPrefabs;
+    [SerializeField] private GameObject _destroyVFX;
 
 
     void OnEnable()
@@ -37,7 +37,8 @@ public class Dummy : MonoBehaviour, IDamage
 
     public void DestroyDummy()
     {
-        Instantiate(smokeEffectPrefabs, transform.position, transform.rotation);
+        Instantiate(_destroyVFX, transform.position, transform.rotation);
         Destroy(gameObject);
     }
+
 }

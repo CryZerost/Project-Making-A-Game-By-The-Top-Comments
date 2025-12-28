@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class WeaponBase : MonoBehaviour
@@ -9,7 +10,7 @@ public abstract class WeaponBase : MonoBehaviour
     [SerializeField] private float _weaponDamage;
     [SerializeField] private ParticleSystem _muzzleEffect;
     [SerializeField] private GameObject _hitEffect;
-    [SerializeField] private LayerMask _whatIsPlayer;
+    [SerializeField] private GameObject _hitMark;
 
     // Cooldown
     [SerializeField] private bool _canShoot = true;
@@ -59,6 +60,12 @@ public abstract class WeaponBase : MonoBehaviour
 
             GameObject impactObj = Instantiate(_hitEffect, hit.point, Quaternion.LookRotation(hit.normal)) as GameObject;
             Destroy(impactObj, 1f);
+        }
+
+        if (Physics.Raycast(ray, out hit, float.PositiveInfinity))
+        {
+            if (hit.collider.gameObject.CompareTag("Enemy") || hit.collider.gameObject.CompareTag("Projectile")) return; 
+            Instantiate(_hitMark, hit.point + (hit.normal * .01f), Quaternion.FromToRotation(Vector3.up, hit.normal));
         }
     }
 }
