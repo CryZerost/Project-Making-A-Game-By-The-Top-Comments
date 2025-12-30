@@ -137,6 +137,8 @@ public abstract class EnemyBase : MonoBehaviour, IDamage
         Gizmos.DrawWireSphere(transform.position, attackRange);
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, sightRange);
+
+
     }
 
     public abstract void Attack();

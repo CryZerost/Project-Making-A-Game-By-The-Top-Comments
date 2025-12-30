@@ -26,10 +26,15 @@ public class PlayerController : MonoBehaviour
     [Header("Item")]
     [SerializeField] private Transform _itemSpawnPoint;
     [SerializeField] private int _playerItemID;
+    [SerializeField] private int _currentItemSlot = -1;
     public bool hasItem = false;
     [SerializeField] private GameObject _currentItem;
     [SerializeField] private GameObject[] dropItemPrefabs;
     [SerializeField] private GameObject[] handItemObjects;
+    public PlayerInventory playerInventory;
+    
+
+
 
     
     
@@ -133,24 +138,76 @@ public class PlayerController : MonoBehaviour
     //    bullet.GetComponent<Rigidbody>().linearVelocity = _cameraTransform.forward * _bulletSpeed;
     //}
 
-    public void AddItem(int itemID)
+    public void AddItem(int itemID, string itemName, int itemQuantity)
     {
         hasItem = true;
         _playerItemID = itemID;
+        foreach (var handItem in handItemObjects)
+        {
+            handItem.SetActive(false);
+        }
         handItemObjects[itemID].SetActive(true);
         _currentItem = handItemObjects[itemID];
+        playerInventory.AddItem(itemID, itemName, itemQuantity);
+
+        var item = playerInventory.items.Find(i => i.itemID == itemID);
+        if (item != null)
+            _currentItemSlot = item.itemSlot;
+
 
     }
 
-    public void RemoveItem(int itemID)
+    public void RemoveItem(int itemSlot)
     {
-        if (!hasItem) return;
-        _currentItem = null;    
-        _currentInteractable = null;
-        hasItem = false;
-        handItemObjects[itemID].SetActive(false);
-        Rigidbody rb = Instantiate(dropItemPrefabs[itemID], _itemSpawnPoint.position, _itemSpawnPoint.rotation).GetComponent<Rigidbody>();
-        rb.AddForce(_cameraTransform.forward * 5f, ForceMode.Impulse);
+        var slotExist = playerInventory.items.Find(s => s.itemSlot == itemSlot);
+
+        if (slotExist != null)
+        {   
+
+            _currentItem = null;
+            _currentInteractable = null;
+            hasItem = false;
+            //_currentItemSlot = -1;
+            handItemObjects[slotExist.itemID].SetActive(false);
+            playerInventory.RemoveItem(slotExist.itemID);
+            Rigidbody rb = Instantiate(dropItemPrefabs[slotExist.itemID], _itemSpawnPoint.position, _itemSpawnPoint.rotation).GetComponent<Rigidbody>();
+            rb.AddForce(_cameraTransform.forward * 5f, ForceMode.Impulse);
+            PlayerUI.instance.DisableAmmoUI();
+        }
+        else
+        {
+            Debug.Log("There's no item in this slot");
+        }
+
+
+    }
+
+    public void SelectItem(int itemSlot)
+    {
+        var slotExist = playerInventory.items.Find(s => s.itemSlot == itemSlot);
+        if (slotExist != null)
+        {
+            foreach (var handItem in handItemObjects)
+            {
+                handItem.SetActive(false);
+            }
+            handItemObjects[slotExist.itemID].SetActive(true);
+            _currentItem = handItemObjects[slotExist.itemID];
+            _currentItemSlot = slotExist.itemSlot;
+            _playerItemID = slotExist.itemID;
+            hasItem = true;
+        }
+        else
+        {
+            foreach (var handItem in handItemObjects)
+            {
+                handItem.SetActive(false);
+            }
+            _currentItemSlot = itemSlot;
+            _currentItem = null;
+            hasItem = false;
+            PlayerUI.instance.DisableAmmoUI();
+        }
     }
 
 
@@ -164,7 +221,7 @@ public class PlayerController : MonoBehaviour
     public void OnDrop(InputAction.CallbackContext context)
     {
         if (!context.started) return;
-        RemoveItem(_playerItemID);
+        RemoveItem(_currentItemSlot);
     }
 
     public void OnAttack(InputAction.CallbackContext context)
@@ -214,5 +271,37 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void OnSlot(InputAction.CallbackContext context)
+    {
+        if (!context.started) return;
 
+        SelectItem(0);
+    }
+    public void OnSlot1(InputAction.CallbackContext context)
+    {
+        if (!context.started) return;
+
+        SelectItem(1);
+    }
+
+    public void OnSlot2(InputAction.CallbackContext context)
+    {
+        if (!context.started) return;
+
+        SelectItem(2);
+    }
+
+    public void OnSlot3(InputAction.CallbackContext context)
+    {
+        if (!context.started) return;
+
+        SelectItem(3);
+    }
+
+    public void OnSlot4(InputAction.CallbackContext context)
+    {
+        if (!context.started) return;
+
+        SelectItem(4);
+    }
 }

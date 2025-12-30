@@ -31,8 +31,6 @@ public class PlayerUI : MonoBehaviour
         playerHealthText.text = $"Health: {health}/{maxHealth}";
     }
 
-    
-
     public void UpdateAmmoUI(float ammo, float maxAmmo)
     {
         ammoSlider.gameObject.SetActive(true);
@@ -46,5 +44,10 @@ public class PlayerUI : MonoBehaviour
     {
         ammoSlider.gameObject.SetActive(true);
         ammoText.text = $"{text}";
+    }
+
+    public void DisableAmmoUI()
+    {
+        ammoSlider.gameObject.SetActive(false);
     }
 }
