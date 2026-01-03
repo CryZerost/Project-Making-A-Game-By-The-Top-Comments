@@ -623,6 +623,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyLocalUI
   enemyHealthSlider: {fileID: 8431150903283450969}
   healthTransform: {fileID: 7897397153711156510}
+  smoothSpeed: 20
 --- !u!114 &376118712663647108
 MonoBehaviour:
   m_ObjectHideFlags: 0

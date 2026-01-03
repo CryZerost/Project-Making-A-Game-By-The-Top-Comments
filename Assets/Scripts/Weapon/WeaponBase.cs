@@ -18,6 +18,7 @@ public abstract class WeaponBase : MonoBehaviour
     [SerializeField] private int ammo = 10;
     [SerializeField] protected int maxAmmo = 10;
     [SerializeField] protected bool _isReloading = false;
+    [SerializeField] protected float _reloadCooldown;
 
     private void OnEnable()
     {
@@ -27,6 +28,18 @@ public abstract class WeaponBase : MonoBehaviour
         PlayerUI.instance.UpdateAmmoUI(ammo, maxAmmo);
     }
 
+    protected bool WeaponRaycast(
+    Vector3 origin,
+    Vector3 direction,
+    out RaycastHit hit,
+    float range
+)
+    {
+        int _hitMask = ~LayerMask.GetMask("whatIsPlayer"); // ini nanti buat biar ya itu lah ya biar ga apakali pelurunya
+        return Physics.Raycast(origin, direction, out hit, range, _hitMask);
+    }
+
+
     public void Shoot()
     {
         if (!_canShoot || _isReloading) return;
@@ -35,7 +48,7 @@ public abstract class WeaponBase : MonoBehaviour
     }
 
     IEnumerator ShootCooldown()
-    {
+    { 
         _canShoot = false;
         ShootProjectile();
 
@@ -57,7 +70,7 @@ public abstract class WeaponBase : MonoBehaviour
 
         PlayerUI.instance.UpdateReloadUI("Is Reloading");
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(_reloadCooldown);
 
         ammo = maxAmmo;
         PlayerUI.instance.UpdateAmmoUI(ammo, maxAmmo);

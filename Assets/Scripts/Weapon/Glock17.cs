@@ -5,10 +5,12 @@ public class Glock17 : WeaponBase
     protected override void ShootSystem()
     {
         RaycastHit hit;
-        Ray ray = new Ray(_playerCamera.position, _playerCamera.forward);
-        if (Physics.Raycast(ray, out hit, _rangeDistance))
+        Vector3 origin = _playerCamera.position;
+        Vector3 direction = _playerCamera.forward;
+
+        if (WeaponRaycast(origin, direction, out hit, _rangeDistance))
         {
-            Debug.Log(hit.transform.name);
+            Debug.Log("This is "+hit.transform.name);
 
             if (hit.collider.gameObject.TryGetComponent(out IDamage damage))
             {
@@ -23,7 +25,7 @@ public class Glock17 : WeaponBase
             Destroy(impactObj, 1f);
         }
 
-        if (Physics.Raycast(ray, out hit, float.PositiveInfinity))
+        if (WeaponRaycast(origin,direction, out hit, float.PositiveInfinity))
         {
             if (hit.collider.gameObject.CompareTag("Enemy") || hit.collider.gameObject.CompareTag("Projectile")) return;
             Instantiate(_hitMark, hit.point + (hit.normal * .01f), Quaternion.FromToRotation(Vector3.up, hit.normal));

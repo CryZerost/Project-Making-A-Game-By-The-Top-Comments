@@ -116,7 +116,8 @@ public abstract class EnemyBase : MonoBehaviour, IDamage
     {
         health -= damage;
 
-        enemyLocalUI.UpdateHealthUI(health, maxHealth);
+        if (enemyLocalUI !=null) 
+            enemyLocalUI.UpdateHealthUI(health, maxHealth);
 
 
         if (health <= 0) StartCoroutine(DestroyEnemy());

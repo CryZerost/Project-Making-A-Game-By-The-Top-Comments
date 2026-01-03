@@ -14,13 +14,21 @@ public class PumpShotgun : WeaponBase
         {
             Vector3 direction = GetSpreadDirection(forward);
             RaycastHit hit;
-            Ray ray = new Ray(origin, direction);
 
-            if (Physics.Raycast(ray,out hit, _rangeDistance))
+            if (WeaponRaycast(origin,direction,out hit, _rangeDistance))
             {
+
+                float falloff = hit.distance / range;
+
+                float finalDamage = Mathf.Lerp(
+                    _weaponDamage,
+                    1f,
+                    falloff
+                );
+
                 if (hit.collider.TryGetComponent(out IDamage damage))
                 {
-                    damage.TakeDamage(_weaponDamage);
+                    damage.TakeDamage(finalDamage);
                 }
 
                 Debug.DrawRay(origin, direction * hit.distance, Color.red, 1f);
@@ -29,7 +37,7 @@ public class PumpShotgun : WeaponBase
             GameObject impactObj = Instantiate(_hitEffect, hit.point, Quaternion.LookRotation(hit.normal)) as GameObject;
             Destroy(impactObj, 1f);
 
-            if (Physics.Raycast(ray, out hit, float.PositiveInfinity))
+            if (WeaponRaycast(origin,direction, out hit, float.PositiveInfinity))
             {
                 if (hit.collider.gameObject.CompareTag("Enemy") || hit.collider.gameObject.CompareTag("Projectile")) return;
                 Instantiate(_hitMark, hit.point + (hit.normal * .01f), Quaternion.FromToRotation(Vector3.up, hit.normal));
